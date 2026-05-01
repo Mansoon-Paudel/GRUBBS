@@ -1,15 +1,19 @@
-using System;
 using UnityEngine;
 
-public class EnemyDamage : MonoBehaviour
+namespace Enemy
 {
-    [SerializeField] private float damage;
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public class EnemyDamage : MonoBehaviour
     {
-        if (collision.tag == "Player")
+        [SerializeField] private float damage;
+
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            collision.GetComponent<Health>().TakeDamage(damage);
+            if (collision.CompareTag("Player"))
+            {
+                Health health = collision.GetComponentInParent<Health>();
+                if (health != null)
+                    health.TakeDamage(damage);
+            }
         }
     }
 }
