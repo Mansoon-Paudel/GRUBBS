@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MeleeEnemy : MonoBehaviour
@@ -18,18 +19,18 @@ public class MeleeEnemy : MonoBehaviour
     //References
     private Animator anim;
     private Health playerHealth;
+    private EnemyPatrol enemyPatrol;
     
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-      
+        enemyPatrol = GetComponentInParent<EnemyPatrol>();
     }
 
     private void Update()
     {
         cooldownTimer += Time.deltaTime;
-        //Attack only when player in sight?
         if (PlayerInSight())
         {
             if (cooldownTimer >= attackCooldown)
@@ -37,7 +38,16 @@ public class MeleeEnemy : MonoBehaviour
                 cooldownTimer = 0;
                 anim.SetTrigger("meleeAttack");
             }
+            
         }
+
+        if (enemyPatrol != null)
+            enemyPatrol.enabled = !PlayerInSight();
+    }
+
+    private void OnDisable()
+    {
+        anim.SetBool("moving", false);
     }
 
     private bool PlayerInSight()

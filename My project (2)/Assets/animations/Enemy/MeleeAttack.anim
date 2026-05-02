@@ -42,6 +42,8 @@ AnimationClip:
       value: {fileID: -9129498914800706997, guid: 357c9e8b04aa54adfa1797d204160136, type: 3}
     - time: 0.8333333
       value: {fileID: -9073370067412346468, guid: a673f2482582a41d39375f25ac43ff0e, type: 3}
+    - time: 1.1666666
+      value: {fileID: -9073370067412346468, guid: a673f2482582a41d39375f25ac43ff0e, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -75,12 +77,13 @@ AnimationClip:
     - {fileID: 2330099432616431969, guid: f2deaa8b20167406c8d8959a59c1d075, type: 3}
     - {fileID: -9129498914800706997, guid: 357c9e8b04aa54adfa1797d204160136, type: 3}
     - {fileID: -9073370067412346468, guid: a673f2482582a41d39375f25ac43ff0e, type: 3}
+    - {fileID: -9073370067412346468, guid: a673f2482582a41d39375f25ac43ff0e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.1666666
+    m_StopTime: 1.1833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -101,16 +104,9 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.33333334
-    functionName: TakeDamage
+    functionName: DamagePlayer
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 1
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.1666666
-    functionName: 
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
     intParameter: 0
     messageOptions: 0

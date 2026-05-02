@@ -14,6 +14,10 @@ public class Health : MonoBehaviour
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
 
+    [Header("Components")]
+    [SerializeField] private Behaviour[] components;
+    private bool invulnerable;
+
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -22,6 +26,9 @@ public class Health : MonoBehaviour
     }
     public void TakeDamage(float _damage)
     {
+        if (invulnerable) return;
+        if (dead) return;
+
         currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
 
         if (currentHealth > 0)
@@ -31,12 +38,20 @@ public class Health : MonoBehaviour
         }
         else
         {
-            if (!dead)
-            {
-                anim.SetTrigger("die");
-                GetComponent<PlayerMovement>().enabled = false;
-                dead = true;
-            }
+            dead = true;
+            anim.SetTrigger("die");
+
+            PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+                playerMovement.enabled = false;
+
+            EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
+            if (enemyPatrol != null)
+                enemyPatrol.enabled = false;
+
+            MeleeEnemy meleeEnemy = GetComponentInParent<MeleeEnemy>();
+            if (meleeEnemy != null)
+                meleeEnemy.enabled = false;
         }
     }
     public void AddHealth(float _value)
@@ -45,6 +60,7 @@ public class Health : MonoBehaviour
     }
     private IEnumerator Invunerability()
     {
+        invulnerable = true;
         Physics2D.IgnoreLayerCollision(10, 11, true);
         for (int i = 0; i < numberOfFlashes; i++)
         {
@@ -54,5 +70,6 @@ public class Health : MonoBehaviour
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         Physics2D.IgnoreLayerCollision(10, 11, false);
+        invulnerable = false;
     }
 }
