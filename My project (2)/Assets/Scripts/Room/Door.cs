@@ -21,12 +21,6 @@ public class Door : MonoBehaviour
                 nextRoom.GetComponent<Room>().ActivateRoom(true);
                 previousRoom.GetComponent<Room>().ActivateRoom(false);
             }
-            else
-            {
-                cam.MoveToNewRoom(previousRoom);
-                previousRoom.GetComponent<Room>().ActivateRoom(true);
-                nextRoom.GetComponent<Room>().ActivateRoom(false);
-            }
         }
     }
 }

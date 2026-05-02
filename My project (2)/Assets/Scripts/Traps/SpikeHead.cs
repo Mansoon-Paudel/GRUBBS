@@ -32,6 +32,9 @@ public class Spikehead : EnemyDamage
     {
         if (attacking)
         {
+        
+        
+
             transform.Translate(destination * Time.deltaTime * speed);
 
           

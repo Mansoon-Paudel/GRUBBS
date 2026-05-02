@@ -180,5 +180,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyProjectile
   damage: 1
-  speed: 10
-  resetTime: 5
+  speed: 15
+  resetTime: 1.25
