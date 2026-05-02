@@ -17,7 +17,6 @@ public class Health : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Behaviour[] components;
     private bool invulnerable;
-
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -27,8 +26,6 @@ public class Health : MonoBehaviour
     public void TakeDamage(float _damage)
     {
         if (invulnerable) return;
-        if (dead) return;
-
         currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
 
         if (currentHealth > 0)
@@ -38,20 +35,13 @@ public class Health : MonoBehaviour
         }
         else
         {
-            dead = true;
-            anim.SetTrigger("die");
-
-            PlayerMovement playerMovement = GetComponent<PlayerMovement>();
-            if (playerMovement != null)
-                playerMovement.enabled = false;
-
-            EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
-            if (enemyPatrol != null)
-                enemyPatrol.enabled = false;
-
-            MeleeEnemy meleeEnemy = GetComponentInParent<MeleeEnemy>();
-            if (meleeEnemy != null)
-                meleeEnemy.enabled = false;
+            if (!dead)
+            {
+                anim.SetTrigger("die");
+                foreach (Behaviour component in components)
+                    component.enabled = false;
+                dead = true;
+            }
         }
     }
     public void AddHealth(float _value)
