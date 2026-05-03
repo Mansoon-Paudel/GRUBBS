@@ -180,10 +180,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spikehead
   damage: 1
-  speed: 0.5
+  speed: 0.6
   range: 20
-  checkDelay: 0.2
+  checkDelay: 0.05
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
-  boundRange: 20
+  boundRange: 22
+  sound: {fileID: 8300000, guid: 6f7460d1d3cac460e94684f271734c03, type: 3}

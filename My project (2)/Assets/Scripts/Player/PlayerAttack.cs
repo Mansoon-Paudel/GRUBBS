@@ -1,46 +1,63 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAttack : MonoBehaviour
+namespace Player
 {
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] fireballs;
-
-    private static readonly int AttackHash = Animator.StringToHash("attack");
-    private Animator _anim;
-    private PlayerMovement _playerMovement;
-    private float _cooldownTimer = Mathf.Infinity;
-
-    private void Awake()
+    public class PlayerAttack : MonoBehaviour
     {
-        _anim = GetComponent<Animator>();
-        _playerMovement = GetComponent<PlayerMovement>();
-    }
+        [SerializeField] private float attackCooldown;
+        [SerializeField] private Transform firePoint;
+        [SerializeField] private GameObject[] fireballs;
+        [SerializeField] private AudioClip attackSound;
 
-    private void Update()
-    {
-        if (Mouse.current != null && Mouse.current.leftButton.isPressed && _cooldownTimer > attackCooldown && _playerMovement.CanAttack())
-            Attack();
+        private static readonly int AttackHash = Animator.StringToHash("attack");
 
-        _cooldownTimer += Time.deltaTime;
-    }
+        private Animator _anim;
+        private PlayerMovement _playerMovement;
+        private float _cooldownTimer = Mathf.Infinity;
 
-    private void Attack()
-    {
-        _anim.SetTrigger(AttackHash);
-        _cooldownTimer = 0;
-
-        fireballs[FindFireball()].transform.position = firePoint.position;
-        fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
-    }
-    private int FindFireball()
-    {
-        for (int i = 0; i < fireballs.Length; i++)
+        private void Awake()
         {
-            if (!fireballs[i].activeInHierarchy)
-                return i;
+            _anim = GetComponent<Animator>();
+            _playerMovement = GetComponent<PlayerMovement>();
         }
-        return 0;
+
+        private void Update()
+        {
+            if (Mouse.current != null && Mouse.current.leftButton.isPressed && _cooldownTimer > attackCooldown && _playerMovement.CanAttack())
+                Attack();
+
+            _cooldownTimer += Time.deltaTime;
+        }
+
+        private void Attack()
+        {
+            if (SoundManager.instance != null && attackSound != null)
+                SoundManager.instance.PlaySound(attackSound);
+
+            _anim.SetTrigger(AttackHash);
+            _cooldownTimer = 0f;
+
+            int idx = FindFireball();
+            if (idx < 0 || idx >= fireballs.Length) return;
+
+            GameObject fireball = fireballs[idx];
+            if (fireball == null) return;
+
+            fireball.transform.position = firePoint.position;
+            Projectile projectile = fireball.GetComponent<Projectile>();
+            if (projectile != null)
+                projectile.SetDirection(Mathf.Sign(transform.localScale.x));
+        }
+
+        private int FindFireball()
+        {
+            for (int i = 0; i < fireballs.Length; i++)
+            {
+                if (!fireballs[i].activeInHierarchy)
+                    return i;
+            }
+            return 0;
+        }
     }
 }

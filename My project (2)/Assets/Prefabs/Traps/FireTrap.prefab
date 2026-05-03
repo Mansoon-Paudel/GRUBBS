@@ -107,8 +107,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Firetrap
   damage: 1
+  soundRange: 15
   animationDelay: 1.5
   activateTime: 2
+  Sound: {fileID: 8300000, guid: 0fb5f50780a3443e19f7699a91d7075f, type: 3}
 --- !u!61 &7158509043786451727
 BoxCollider2D:
   m_ObjectHideFlags: 0

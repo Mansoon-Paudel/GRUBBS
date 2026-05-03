@@ -18,6 +18,8 @@ public class Spikehead : EnemyDamage
     private float checkTimer;
     private bool attacking;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip sound;
     private void Start()
     {
         spawnPosition = transform.position; 
@@ -86,6 +88,7 @@ public class Spikehead : EnemyDamage
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
+        SoundManager.instance.PlaySound(sound);
         Stop();
     }
 

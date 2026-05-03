@@ -19,6 +19,9 @@ public class MeleeEnemy : MonoBehaviour
     private Health playerHealth;
     private EnemyPatrol enemyPatrol;
     
+    [Header("Sound")]
+    [SerializeField] private AudioClip attackSound;
+    
 
     private void Awake()
     {
@@ -35,6 +38,7 @@ public class MeleeEnemy : MonoBehaviour
             {
                 cooldownTimer = 0;
                 anim.SetTrigger("meleeAttack");
+                SoundManager.instance.PlaySound(attackSound);
             }
             
         }
