@@ -28,7 +28,8 @@ public class CameraController : MonoBehaviour
     public void MoveToNewRoom(Transform _newRoom)
     {
         currentPosX = _newRoom.position.x;
-        
+        currentPosY = _newRoom.position.y;
+        currentPosZ = _newRoom.position.z;
     }
 }
 

@@ -7,11 +7,10 @@ public class HealthCollectible : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
-        {
-            SoundManager.instance.PlaySound(Sound);
-            collision.GetComponent<Health>().AddHealth(healthValue);
-            gameObject.SetActive(false);
-        }
+        if (!collision.CompareTag("Player")) return;
+
+        SoundManager.instance.PlaySound(Sound);
+        collision.GetComponent<Health>().AddHealth(healthValue);
+        gameObject.SetActive(false);
     }
 }

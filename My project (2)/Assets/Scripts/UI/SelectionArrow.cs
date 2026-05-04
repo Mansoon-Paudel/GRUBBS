@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class SelectionArrow : MonoBehaviour
 {
@@ -9,25 +10,55 @@ public class SelectionArrow : MonoBehaviour
     private RectTransform arrow;
     private int currentPosition;
 
+    private InputAction _upAction;
+    private InputAction _downAction;
+    private InputAction _interactAction;
+
     private void Awake()
     {
         arrow = GetComponent<RectTransform>();
+
+        // Setup input actions
+        _upAction = new InputAction(type: InputActionType.Button);
+        _upAction.AddBinding("<Keyboard>/upArrow");
+        _upAction.AddBinding("<Keyboard>/w");
+
+        _downAction = new InputAction(type: InputActionType.Button);
+        _downAction.AddBinding("<Keyboard>/downArrow");
+        _downAction.AddBinding("<Keyboard>/s");
+
+        _interactAction = new InputAction(type: InputActionType.Button);
+        _interactAction.AddBinding("<Keyboard>/enter");
+        _interactAction.AddBinding("<Keyboard>/e");
     }
+
     private void OnEnable()
     {
+        _upAction.Enable();
+        _downAction.Enable();
+        _interactAction.Enable();
+        
         currentPosition = 0;
         ChangePosition(0);
     }
+
+    private void OnDisable()
+    {
+        _upAction.Disable();
+        _downAction.Disable();
+        _interactAction.Disable();
+    }
+
     private void Update()
     {
-        //Change the position of the selection arrow
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        // Change the position of the selection arrow
+        if (_upAction.WasPressedThisFrame())
             ChangePosition(-1);
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        if (_downAction.WasPressedThisFrame())
             ChangePosition(1);
 
-        //Interact with current option
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.E))
+        // Interact with current option
+        if (_interactAction.WasPressedThisFrame())
             Interact();
     }
 
@@ -37,6 +68,7 @@ public class SelectionArrow : MonoBehaviour
 
         if (_change != 0)
             SoundManager.instance.PlaySound(changeSound);
+
         if (currentPosition < 0)
             currentPosition = buttons.Length - 1;
         else if (currentPosition > buttons.Length - 1)

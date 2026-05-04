@@ -34,10 +34,13 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int RunHash      = Animator.StringToHash("run");
     private static readonly int GroundedHash = Animator.StringToHash("grounded");
     private static readonly int JumpHash     = Animator.StringToHash("jump");
+    private static readonly int OnWallHash   = Animator.StringToHash("Onwall");
+    private static readonly int WallHash     = Animator.StringToHash("Wall");
 
     private Rigidbody2D   _body;
     private Animator      _anim;
     private BoxCollider2D _boxCollider;
+    private SpriteRenderer _spriteRend;
     private Vector3       _originalScale;
 
     private float _wallJumpCooldown = 999f;
@@ -55,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
         _body          = GetComponent<Rigidbody2D>();
         _anim          = GetComponent<Animator>();
         _boxCollider   = GetComponent<BoxCollider2D>();
+        _spriteRend    = GetComponent<SpriteRenderer>();
 
         _moveAction = new InputAction(type: InputActionType.Value);
         _moveAction.AddCompositeBinding("1DAxis")
@@ -106,25 +110,25 @@ public class PlayerMovement : MonoBehaviour
             coyoteCounter -= Time.deltaTime;
         }
 
-        // Flip
+        // Flip using SpriteRenderer.flipX
         if (_horizontalInput > 0.01f)
         {
             _facingSign = 1f;
-            transform.localScale = new Vector3(Mathf.Abs(_originalScale.x), _originalScale.y, _originalScale.z);
+            if (_spriteRend != null) _spriteRend.flipX = false;
         }
         else if (_horizontalInput < -0.01f)
         {
             _facingSign = -1f;
-            transform.localScale = new Vector3(-Mathf.Abs(_originalScale.x), _originalScale.y, _originalScale.z);
+            if (_spriteRend != null) _spriteRend.flipX = true;
         }
 
         // Animations
         _anim.SetBool(RunHash,      Mathf.Abs(_horizontalInput) > 0.01f);
         _anim.SetBool(GroundedHash, grounded);
-        _anim.SetBool("Onwall",     touchingWall && !grounded);
+        _anim.SetBool(OnWallHash,   touchingWall && !grounded);
 
         if (touchingWall && !grounded)
-            _anim.SetTrigger("Wall");
+            _anim.SetTrigger(WallHash);
 
         if (_wallJumpCooldown > wallJumpLockTime)
         {

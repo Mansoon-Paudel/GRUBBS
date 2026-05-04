@@ -13,16 +13,11 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
-        {
-            if (collision.transform.position.x < transform.position.x)
-            {
-                cam.MoveToNewRoom(nextRoom);
-            }
-            else
-            {
-                cam.MoveToNewRoom(previousRoom);
-            }
-        }
+        if (!collision.CompareTag("Player")) return;
+
+        if (collision.transform.position.x < transform.position.x)
+            cam.MoveToNewRoom(nextRoom);
+        else
+            cam.MoveToNewRoom(previousRoom);
     }
 }

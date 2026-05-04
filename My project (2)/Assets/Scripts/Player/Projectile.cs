@@ -29,9 +29,9 @@ public class Projectile : MonoBehaviour
     {
         hit = true;
         boxCollider.enabled = false;
-        anim.SetBool("End", true);
+        anim.SetTrigger("End");
 
-        if (collision.tag == "Enemy")
+        if (collision.CompareTag("Enemy"))
             collision.GetComponent<Health>().TakeDamage(1);
     }
     public void SetDirection(float _direction)

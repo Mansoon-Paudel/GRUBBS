@@ -35,6 +35,7 @@ public class Health : MonoBehaviour
 
         if (currentHealth > 0)
         {
+            
             anim.SetTrigger("hurt");
             StartCoroutine(Invunerability());
             SoundManager.instance.PlaySound(hurtSound);
@@ -43,7 +44,6 @@ public class Health : MonoBehaviour
         {
             if (!dead)
             {
-                //Deactivate all attached component classes
                 foreach (Behaviour component in components)
                     component.enabled = false;
 
@@ -52,6 +52,11 @@ public class Health : MonoBehaviour
 
                 dead = true;
                 SoundManager.instance.PlaySound(deathSound);
+                
+                // Trigger game over UI
+                PlayerRespawn playerRespawn = GetComponent<PlayerRespawn>();
+                if (playerRespawn != null)
+                    playerRespawn.OnPlayerDeath();
             }
         }
     }
@@ -85,6 +90,7 @@ public class Health : MonoBehaviour
         anim.ResetTrigger("die");
         anim.Play("Idle");
         StartCoroutine(Invunerability());
+        dead = false;
 
         //Activate all attached component classes
         foreach (Behaviour component in components)
