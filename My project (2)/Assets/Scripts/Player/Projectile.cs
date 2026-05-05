@@ -31,8 +31,10 @@ public class Projectile : MonoBehaviour
         boxCollider.enabled = false;
         anim.SetTrigger("End");
 
-        if (collision.CompareTag("Enemy"))
-            collision.GetComponent<Health>().TakeDamage(1);
+        // Try to damage any Health on the collided object or its parents.
+        Health health = collision.GetComponentInParent<Health>();
+        if (health != null)
+            health.TakeDamage(1);
     }
     public void SetDirection(float _direction)
     {
@@ -53,3 +55,4 @@ public class Projectile : MonoBehaviour
         gameObject.SetActive(false);
     }
 }
+

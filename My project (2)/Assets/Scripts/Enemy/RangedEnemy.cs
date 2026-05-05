@@ -22,7 +22,6 @@ public class RangedEnemy : MonoBehaviour
     [Header("Fireball Sound")]
     [SerializeField] private AudioClip fireballSound;
     
-    //References
     private Animator anim;
     private EnemyPatrol enemyPatrol;
 
@@ -35,8 +34,6 @@ public class RangedEnemy : MonoBehaviour
     private void Update()
     {
         cooldownTimer += Time.deltaTime;
-
-        //Attack only when player in sight?
         if (PlayerInSight())
         {
             if (cooldownTimer >= attackCooldown)

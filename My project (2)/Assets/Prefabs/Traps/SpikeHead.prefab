@@ -181,7 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spikehead
   damage: 1
   speed: 0.6
-  range: 20
+  range: 22
   checkDelay: 0.05
   playerLayer:
     serializedVersion: 2

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class Health : MonoBehaviour
     private Animator anim;
     private bool dead;
 
+    [Header("Boss Death")]
+    [SerializeField] private int bossDeathSceneBuildIndex = 2;
+    [SerializeField] private string bossDeathSceneName = "End Menu";
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
@@ -44,16 +48,36 @@ public class Health : MonoBehaviour
         {
             if (!dead)
             {
+                if (IsBoss())
+                {
+                    dead = true;
+                    if (!string.IsNullOrEmpty(bossDeathSceneName))
+                    {
+                        Debug.Log("Health: Boss died — loading scene by name: " + bossDeathSceneName);
+                        SceneManager.LoadScene(bossDeathSceneName);
+                        return;
+                    }
+
+                    int buildCount = SceneManager.sceneCountInBuildSettings;
+                    if (bossDeathSceneBuildIndex >= 0 && bossDeathSceneBuildIndex < buildCount)
+                    {
+                        Debug.Log("Health: Boss died — loading scene by build index: " + bossDeathSceneBuildIndex);
+                        SceneManager.LoadScene(bossDeathSceneBuildIndex);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Health: bossDeathSceneBuildIndex ({bossDeathSceneBuildIndex}) is out of range (0..{buildCount - 1}). Not loading scene.");
+                    }
+
+                    return;
+                }
+                
                 foreach (Behaviour component in components)
                     component.enabled = false;
-
                 anim.SetBool("grounded", true);
                 anim.SetTrigger("die");
-
                 dead = true;
                 SoundManager.instance.PlaySound(deathSound);
-                
-                // Trigger game over UI
                 PlayerRespawn playerRespawn = GetComponent<PlayerRespawn>();
                 if (playerRespawn != null)
                     playerRespawn.OnPlayerDeath();
@@ -83,23 +107,21 @@ public class Health : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Respawn control: prevent accidental automatic respawn from animation events.
-    // A respawn must be explicitly allowed (via AllowRespawnAndPerform) before it will run.
+    private bool IsBoss()
+    {
+        return CompareTag("Boss") || (transform.root != null && transform.root.CompareTag("Boss"));
+    }
     private bool _allowRespawn = false;
-
-    // Called by PlayerRespawn when the player chooses to respawn at a checkpoint.
     public void AllowRespawnAndPerform()
     {
         _allowRespawn = true;
         Respawn();
     }
 
-    // Perform respawn, but only when allowed.
     public void Respawn()
     {
         if (!_allowRespawn)
         {
-            Debug.Log("Health.Respawn called but not allowed. Ignoring.");
             return;
         }
 
