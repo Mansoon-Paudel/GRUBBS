@@ -10,12 +10,17 @@ public class ArrowTrap : MonoBehaviour
 
     private float cooldownTimer;
     private Transform player;
+    private SpriteRenderer _spriteRend;
+    private Vector3 _firePointLocalPos;
 
     private void Awake()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
+        _spriteRend = GetComponent<SpriteRenderer>();
+        if (firePoint != null)
+            _firePointLocalPos = firePoint.localPosition;
     }
 
     private void Update()
@@ -34,8 +39,30 @@ public class ArrowTrap : MonoBehaviour
             SoundManager.instance.PlaySound(arrowSound);
 
         int idx = FindArrow();
-        arrows[idx].transform.position = firePoint.position;
-        arrows[idx].GetComponent<EnemyProjectile>().ActivateProjectile();
+        GameObject arrow = arrows[idx];
+        if (arrow == null) return;
+
+        float dir = (_spriteRend != null && _spriteRend.flipX) ? -1f : 1f;
+        Vector3 spawnWorld;
+        if (firePoint != null)
+        {
+            Vector3 local = _firePointLocalPos;
+            local.x = Mathf.Abs(local.x) * (dir < 0f ? -1f : 1f);
+            Transform parent = firePoint.parent != null ? firePoint.parent : transform;
+            spawnWorld = parent.TransformPoint(local);
+        }
+        else
+        {
+            spawnWorld = transform.position + new Vector3(1f * dir, 0f, 0f);
+        }
+
+        arrow.transform.position = spawnWorld;
+        EnemyProjectile ep = arrow.GetComponent<EnemyProjectile>();
+        if (ep != null)
+        {
+            ep.ActivateProjectile();
+            ep.SetDirection(dir);
+        }
     }
 
     private bool PlayerIsNearby()

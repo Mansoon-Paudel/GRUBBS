@@ -83,9 +83,28 @@ public class Health : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Respawn
+    // Respawn control: prevent accidental automatic respawn from animation events.
+    // A respawn must be explicitly allowed (via AllowRespawnAndPerform) before it will run.
+    private bool _allowRespawn = false;
+
+    // Called by PlayerRespawn when the player chooses to respawn at a checkpoint.
+    public void AllowRespawnAndPerform()
+    {
+        _allowRespawn = true;
+        Respawn();
+    }
+
+    // Perform respawn, but only when allowed.
     public void Respawn()
     {
+        if (!_allowRespawn)
+        {
+            Debug.Log("Health.Respawn called but not allowed. Ignoring.");
+            return;
+        }
+
+        _allowRespawn = false;
+
         AddHealth(startingHealth);
         anim.ResetTrigger("die");
         anim.Play("Idle");

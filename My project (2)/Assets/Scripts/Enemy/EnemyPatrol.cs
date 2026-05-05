@@ -20,13 +20,10 @@ public class EnemyPatrol : MonoBehaviour
 
     [Header("Enemy Animator")]
     [SerializeField] private Animator anim;
-    
-    private SpriteRenderer spriteRend;
 
     private void Awake()
     {
         initScale = enemy.localScale;
-        spriteRend = enemy.GetComponent<SpriteRenderer>();
     }
     private void OnDisable()
     {
@@ -64,10 +61,12 @@ public class EnemyPatrol : MonoBehaviour
     {
         idleTimer = 0;
         anim.SetBool("moving", true);
-        
-        if (spriteRend != null)
-            spriteRend.flipX = _direction < 0;
-        
+
+        //Make enemy face direction
+        enemy.localScale = new Vector3(Mathf.Abs(initScale.x) * _direction,
+            initScale.y, initScale.z);
+
+     
         enemy.position = new Vector3(enemy.position.x + Time.deltaTime * _direction * speed,
             enemy.position.y, enemy.position.z);
     }

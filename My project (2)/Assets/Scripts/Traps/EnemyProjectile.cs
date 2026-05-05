@@ -10,6 +10,7 @@ public class EnemyProjectile : EnemyDamage
     private Animator anim;
     private bool hit;
     private BoxCollider2D col;
+    private float _direction = 1f;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class EnemyProjectile : EnemyDamage
     private void Update()
     {
         if (hit) return;
-        float movementSpeed = speed * Time.deltaTime;
+        float movementSpeed = speed * Time.deltaTime * _direction;
         transform.Translate(movementSpeed, 0, 0);
 
         lifetime += Time.deltaTime;
@@ -51,5 +52,11 @@ public class EnemyProjectile : EnemyDamage
     private void Deactivate()
     {
         gameObject.SetActive(false);
+    }
+
+    // Set movement direction: 1 = right, -1 = left
+    public void SetDirection(float dir)
+    {
+        _direction = Mathf.Sign(dir);
     }
 }
