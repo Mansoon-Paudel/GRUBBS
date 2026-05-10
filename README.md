@@ -11,7 +11,6 @@ An 2D pixel Platformer Game made in Unity.
 - A: Walk Left
 - D: Walk Right
 - LMB: Attack
-- 
  
 ---
  
@@ -27,5 +26,8 @@ An 2D pixel Platformer Game made in Unity.
 - Option to change the Sound Effects output
 ---
 Note:- Crazyy Skill set required to complete
+
+[![Watch Gameplay](https://github.com/user-attachments/assets/95c64cdd-83ba-4bcb-90a0-d025e88e5525
+)](https://youtu.be/AhiU3vSErWI)
  
 
