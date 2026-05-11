@@ -24,6 +24,7 @@ An 2D pixel Platformer Game made in Unity.
 - Traps with AI
 - Option to change the Music output
 - Option to change the Sound Effects output
+- The Knight At the end has Blocks which recharge in certain time and only trigger when a certain criteria meets, The criteria is a secret to make the gameplay balanced
 ---
 Note:- Crazyy Skill set required to complete
 
